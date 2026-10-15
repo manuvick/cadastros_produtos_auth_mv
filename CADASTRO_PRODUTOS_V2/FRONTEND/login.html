@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Snoopy Store</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+  body { background:#9B1C1C; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  .card { background:white; padding:30px; border-radius:15px; width:90%; max-width:380px; box-shadow:0 10px 30px rgba(0,0,0,0.3); text-align:center; }
+  .card h1 { color:#9B1C1C; margin-bottom:20px; }
+  .card input { width:100%; padding:12px; margin:8px 0; border:2px solid #ddd; border-radius:8px; }
+  .card button { width:100%; padding:12px; background:#9B1C1C; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px; }
+  .card p { margin-top:15px; font-size:14px; }
+  .card a { color:#9B1C1C; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Login</h1>
+  <input id="email" placeholder="Email" value="admin@teste.com">
+  <input id="senha" type="password" placeholder="Senha" value="123456">
+  <button onclick="login()">Entrar</button>
+  <p><a href="cadastro.html">Criar conta</a> | <a href="index.html">Ver produtos</a></p>
+  <p id="msg" style="color:green; font-weight:bold;"></p>
+</div>
+<script>
+const API = "http://localhost:3000";
+async function login(){
+  const res = await fetch(`${API}/auth/login`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({email: email.value, senha: senha.value})
+  });
+  const data = await res.json();
+  if(data.token){
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('perfil', data.perfil);
+    localStorage.setItem('nome', data.nome);
+    document.getElementById('msg').innerText = "Logado como "+data.perfil+"!";
+    setTimeout(()=> location.href='index.html', 800);
+  } else {
+    alert(data.erro);
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar Conta - Snoopy Store</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+  body { background:#9B1C1C; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  .card { background:white; padding:30px; border-radius:15px; width:90%; max-width:380px; box-shadow:0 10px 30px rgba(0,0,0,0.3); text-align:center; }
+  .card h1 { color:#9B1C1C; margin-bottom:20px; font-size:26px; }
+  .card input, .card select { width:100%; padding:12px; margin:8px 0; border:2px solid #ddd; border-radius:8px; font-size:15px; }
+  .card button { width:100%; padding:12px; background:#E67E22; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; margin-top:10px; }
+  .card button:hover { background:#d35400; }
+  .card a { color:#9B1C1C; text-decoration:none; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Criar Conta</h1>
+  <input id="nome" placeholder="Seu nome">
+  <input id="email" placeholder="Seu email" value="admin@teste.com">
+  <input id="senha" type="password" placeholder="Sua senha" value="123456">
+  <select id="perfil">
+    <option value="admin">Admin (pode cadastrar)</option>
+    <option value="cliente">Cliente (so ve)</option>
+  </select>
+  <button onclick="cadastrar()">Cadastrar</button>
+  <p style="margin-top:15px"><a href="login.html">Ja tenho conta</a> | <a href="index.html">Ver produtos</a></p>
+</div>
+<script>
+const API = "http://localhost:3000";
+async function cadastrar(){
+  const res = await fetch(`${API}/auth/registro`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ nome: nome.value, email: email.value, senha: senha.value, perfil: perfil.value })
+  });
+  const data = await res.json();
+  if(data.erro){ alert(data.erro); }
+  else { alert("Conta criada! Agora faz login"); location.href='login.html'; }
+}
+</script>
+</body>
+</html>
